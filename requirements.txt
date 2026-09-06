@@ -1,0 +1,10 @@
+# Unpinned on purpose — install the current builds. Pin if a release breaks you.
+faster-whisper     # STT (bundles ctranslate2, auto CPU/GPU)
+sounddevice        # mic capture
+numpy              # audio buffers
+httpx              # Ollama HTTP API
+pynput             # global hotkey + Ctrl+V emulation
+pyperclip          # clipboard read/write for paste injection
+pyyaml             # config.yaml
+pystray            # tray icon (optional; app runs console-only without it)
+Pillow             # tray icon image (optional)

@@ -1,0 +1,35 @@
+name: release
+
+# Push a tag like v0.1.0 to build the Windows app and publish it as a GitHub Release.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write   # needed to create the release
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Build (CPU — CI has no GPU; the app self-heals to CPU anyway)
+        run: .\build.ps1
+
+      - name: Zip the app folder
+        run: Compress-Archive -Path dist\LocalFlow -DestinationPath LocalFlow-windows.zip
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: LocalFlow-windows.zip
