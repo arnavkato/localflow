@@ -17,9 +17,12 @@ _PREAMBLE = re.compile(
     re.IGNORECASE,
 )
 
-# Few-shot: teach "clean it, don't answer it". The question example is the important one.
+# Few-shot: teach "clean it, don't answer it". The question examples are the important ones —
+# a chat model's instinct is to REPLY to a question, so we show several questions staying questions.
 _EXAMPLES = [
-    ("um so how are we doing now", "How are we doing now?"),
+    ("um so how are we doing today", "How are we doing today?"),
+    ("what do you uh think about the new design", "What do you think about the new design?"),
+    ("can you like send me the file when you get a chance", "Can you send me the file when you get a chance?"),
     ("yeah i think we should like ship it tomorrow you know", "I think we should ship it tomorrow."),
 ]
 

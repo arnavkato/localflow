@@ -11,7 +11,7 @@ whisper:
 ollama:
   enabled: true          # false -> paste the raw transcript, skip LLM cleanup entirely
   url: "http://localhost:11434"
-  model: "llama3.2:1b"   # light & fast; cleanup is not demanding. Use 3b for slightly better prose.
+  model: "llama3.2:3b"   # 3b follows "reformat, don't reply" far more reliably than 1b. 1b is faster but answers questions.
   keep_alive: "5m"       # keep model in VRAM this long after use — avoids reload stalls between dictations
   system_prompt: |
     You are a transcription cleanup filter, NOT a chat assistant. Every user message is a raw
