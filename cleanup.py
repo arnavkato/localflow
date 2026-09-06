@@ -17,6 +17,21 @@ _PREAMBLE = re.compile(
     re.IGNORECASE,
 )
 
+# Instruction restated INSIDE every user turn, right next to the text. Small models weight the
+# most-recent instruction heaviest, and wrapping the transcript makes it read as data, not a
+# message to reply to. This is the main defence against "answering" instead of cleaning.
+_INSTRUCTION = (
+    "Reformat the dictation transcript below. Remove filler words, fix punctuation, "
+    "capitalization and sentence/paragraph breaks. Output ONLY the reformatted transcript — "
+    "do NOT reply to it or answer any question in it. If it is a question, output that same "
+    "question, cleaned.\n\nTranscript:\n"
+)
+
+
+def _wrap(text):
+    return _INSTRUCTION + text
+
+
 # Few-shot: teach "clean it, don't answer it". The question examples are the important ones —
 # a chat model's instinct is to REPLY to a question, so we show several questions staying questions.
 _EXAMPLES = [
@@ -38,9 +53,9 @@ class Cleaner:
     def clean(self, text):
         messages = [{"role": "system", "content": self.system_prompt}]
         for raw, cleaned in _EXAMPLES:
-            messages.append({"role": "user", "content": raw})
+            messages.append({"role": "user", "content": _wrap(raw)})
             messages.append({"role": "assistant", "content": cleaned})
-        messages.append({"role": "user", "content": text})
+        messages.append({"role": "user", "content": _wrap(text)})
 
         r = httpx.post(
             f"{self.url}/api/chat",
